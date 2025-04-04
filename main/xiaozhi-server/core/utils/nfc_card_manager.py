@@ -26,9 +26,7 @@ class NFCCardManager:
             card_id TEXT PRIMARY KEY,
             card_name TEXT NOT NULL,
             topic TEXT NOT NULL,
-            prompt TEXT NOT NULL,
-            difficulty_level INTEGER DEFAULT 1,
-            age_range TEXT DEFAULT '2-3'
+            prompt TEXT NOT NULL
         )
         ''')
         
@@ -37,13 +35,9 @@ class NFCCardManager:
         if cursor.fetchone()[0] == 0:
             # 添加示例数据
             sample_cards = [
-                ("ABCD1234EFGH5678", "小猫卡片", "猫咪", "猫是一种可爱的宠物，有很多有趣的习性", 1, "2-3"),
-                ("1234ABCD5678EFGH", "小狗卡片", "狗狗", "狗是人类最忠实的朋友，有很多品种", 1, "2-3"),
-                ("AAAA1111BBBB2222", "恐龙卡片", "恐龙", "恐龙是已经灭绝的庞大动物，生活在很久以前", 2, "3-4"),
-                ("2222BBBB3333CCCC", "数字卡片", "数字", "数字是我们日常生活中不可或缺的基础知识", 1, "2-3"),
-                ("3333CCCC4444DDDD", "颜色卡片", "颜色", "世界上有许多美丽的颜色，红黄蓝是三原色", 1, "2-3")
+                ("ABCD1234EFGH5678", "小猫卡片", "猫咪", "猫是一种可爱的宠物，有很多有趣的习性"),
             ]
-            cursor.executemany("INSERT INTO nfc_cards VALUES (?, ?, ?, ?, ?, ?)", sample_cards)
+            cursor.executemany("INSERT INTO nfc_cards VALUES (?, ?, ?, ?)", sample_cards)
             self.logger.bind(tag=TAG).info(f"已初始化NFC卡片示例数据，共{len(sample_cards)}条")
         
         conn.commit()
@@ -56,7 +50,7 @@ class NFCCardManager:
             cursor = conn.cursor()
             
             cursor.execute(
-                "SELECT card_id, card_name, topic, prompt, difficulty_level, age_range FROM nfc_cards WHERE card_id = ?", 
+                "SELECT card_id, card_name, topic, prompt FROM nfc_cards WHERE card_id = ?", 
                 (card_id,)
             )
             
@@ -68,9 +62,7 @@ class NFCCardManager:
                     "card_id": result[0],
                     "card_name": result[1],
                     "topic": result[2],
-                    "prompt": result[3],
-                    "difficulty_level": result[4],
-                    "age_range": result[5]
+                    "prompt": result[3]
                 }
             return None
         except Exception as e:
