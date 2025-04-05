@@ -161,3 +161,5 @@ main/manager-api/.vscode
 .specstory/
 # Ignore webpack cache directory
 main/manager-web/.webpack_cache/
+# .vscode
+.vscode
